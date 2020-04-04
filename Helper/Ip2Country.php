@@ -55,6 +55,8 @@ class Ip2Country
     public function __construct(
         ComponentRegistrarInterface $componentRegistrar
     ) {
+        #\Magento\Framework\Module\Dir\Reader $moduleReader
+        #$this->moduleReader->getModuleDir(\Magento\Framework\Module\Dir::MODULE_VIEW_DIR,'Vendor_Module');
         $this->componentRegistrar = $componentRegistrar;
 		$path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, self::MODULE_NAME);
         $datafile = $path . self::BINARY_FILE;
