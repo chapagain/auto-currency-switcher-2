@@ -29,8 +29,17 @@ This extension uses `Webnet77's Ip2Country` IP Address databases for IP Address 
     - `php bin/magento module:enable Chapagain_AutoCurrency –clear-static-content`
 5. Do setup upgrade with the following command:
     - `php bin/magento setup:upgrade`
-7. That's all. The extension is installed now.
 
+#### Composer Installation
+1. Go to your Magento website’s root directory with the following command:
+    - `cd /path/to/your/magento/root/directory`
+2. Run the following command:
+    - `composer require chapagain/magento2-autocurrency`
+3. Enable the module and clear static content with the following command:
+    - `php bin/magento module:enable Chapagain_AutoCurrency –clear-static-content`
+4. Do setup upgrade with the following command:
+    - `php bin/magento setup:upgrade`
+    
 #### Configuration Settings
 
 1. Login to your Magento site's admin
