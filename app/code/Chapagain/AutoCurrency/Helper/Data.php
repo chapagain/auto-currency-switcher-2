@@ -23,7 +23,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 	 * @return boolean 0 or 1
 	 */ 
 	public function isEnabled()
-    { 			
+    {
 		$storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;	
         return $this->scopeConfig->getValue(self::XML_PATH_AUTOCURRENCY_ENABLED, $storeScope);
     }
@@ -34,7 +34,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return string
      */
 	public function getIpAddress() 
-	{		
+	{
 		// http://www.xroxy.com/proxylist.php?country=GB&sort=ip
 		//return '128.199.105.86';	// GB/UK
 		//return '104.131.166.160';	// US
@@ -46,12 +46,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		
 	/**
      * Check whether the given IP Address is valid
+	 * Returns true for both IPv4 and IPv6 addresses
      * 
      * @param string IP Address
      * @return boolean True/False
      */
 	public function checkValidIp($ip) 
-	{			
+	{
 		if(!filter_var($ip, FILTER_VALIDATE_IP)) {
 			return false;
 		}		
@@ -60,12 +61,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 	
 	/**
      * Check whether the given IP Address is IPv6
+	 * Returns true for IPv6 addresses only
+	 * Returns false for IPv4 addresses
      * 
      * @param string IP Address
      * @return boolean True/False
      */
 	public function checkIpv6($ip) 
-	{			
+	{
 		if(!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
 			return false;
 		}		
@@ -78,7 +81,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * 
      */
 	public function loadIp2Country()
-	{		
+	{
 		//include_once(BP.'/var/geoip/ip2country/Ip2Country.php');
 		include_once('Ip2Country.php');
 		$ipc = new Ip2Country(BP.'/var/geoip/ip2country/ip2country.dat');
@@ -141,4 +144,3 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		return $map[$countryCode];
 	}
 }
-?>
