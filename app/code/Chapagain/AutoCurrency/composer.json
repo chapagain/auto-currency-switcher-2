@@ -1,13 +1,22 @@
 {
-  "name": "chapagain/auto-currency",
+  "name": "chapagain/magento2-autocurrency",
   "description": "Automatic Currency Switcher Extension for Magento 2",
   "type": "magento2-module",
   "version": "2.1.0",
+  "keywords": ["magento", "currency", "switcher"],
   "license": [
-    "MIT"
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "authors": [
+    {
+        "name": "Mukesh Chapagain",
+        "homepage": "http://blog.chapagain.com.np",
+        "role": "Developer"
+    }
   ],
   "require": {
-    "php": "~7.1.3||~7.2.0",
+    "php": "~7.0.13||~7.1.0||~7.2.0||~7.3.0",
     "magento/module-config": "100.0.*",
     "magento/module-store": "100.0.*",
     "magento/module-backend": "100.0.*",
