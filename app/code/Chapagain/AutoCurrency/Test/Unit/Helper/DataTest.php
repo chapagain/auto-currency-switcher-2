@@ -2,7 +2,9 @@
 namespace Chapagain\AutoCurrency\Test\Unit\Helper;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Chapagain\AutoCurrency\Helper\Data;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class DataTest extends TestCase
@@ -11,29 +13,49 @@ class DataTest extends TestCase
      * @var Data
      */
 	private $data;
+
+	/**
+     * @var ScopeConfigInterface|MockObject
+     */
+	private $scopeConfigMock;
 	
 	/**
      * Set up test class
      */
-    public function setUp()
+    public function setUp()	
     {
 		parent::setUp();
 		
-		$scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+		$this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-        $this->data = new Data($scopeConfigMock);
+        $this->data = new Data($this->scopeConfigMock);
 	}
 
 	/**
+	 * @test
 	 * Test if the helper class exists
 	 */
 	public function testInit()
 	{
 		$this->assertInstanceOf(Data::class, $this->data);
 	}
+
+	/**
+	 * @test
+	 * Test if the module is enabled
+	 */
+	public function testIsEnabled()
+	{
+		$this->scopeConfigMock->expects($this->once())
+			->method('getValue')
+            ->with(Data::XML_PATH_AUTOCURRENCY_ENABLED, ScopeInterface::SCOPE_STORE)
+			->will($this->returnValue(true));
 		
+        $this->assertTrue((bool)$this->data->isEnabled());
+	}
+
 	/**
      * @test
 	 * @dataProvider providerTestCheckValidIp
