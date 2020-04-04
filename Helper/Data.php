@@ -48,7 +48,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		// http://www.xroxy.com/proxylist.php?country=GB&sort=ip
 		//return '128.199.105.86';	// GB/UK
 		//return '104.131.166.160';	// US
-		return '146.185.155.141';	// NL
+		//return '146.185.155.141';	// NL
 		//return '103.100.83.253';	// IN
 		//return '203.78.162.156';	// NP
 		return $_SERVER['REMOTE_ADDR'];
