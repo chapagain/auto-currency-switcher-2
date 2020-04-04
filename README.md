@@ -29,8 +29,6 @@ This extension uses `Webnet77's Ip2Country` IP Address databases for IP Address 
     - `php bin/magento module:enable Chapagain_AutoCurrency –clear-static-content`
 5. Do setup upgrade with the following command:
     - `php bin/magento setup:upgrade`
-6. Flush cache with the following command:
-    - `php bin/magento cache:flush`
 7. That's all. The extension is installed now.
 
 #### Configuration Settings
