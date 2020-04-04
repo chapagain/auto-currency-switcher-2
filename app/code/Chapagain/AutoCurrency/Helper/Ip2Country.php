@@ -1,6 +1,10 @@
 <?php
 namespace Chapagain\AutoCurrency\Helper;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+
+
 /**
  * This class contains the capability to look up IP addresses and return the correct
  * country, based on the lookup data generated from process_csv.php.
@@ -30,21 +34,31 @@ namespace Chapagain\AutoCurrency\Helper;
  */
 class Ip2Country
 {
-    private $index = null;     // Holds the preloaded index
-    private $data  = array();  // Holds the data records, one chunk per index group
+    const MODULE_NAME = 'Chapagain_AutoCurrency';
+    const BINARY_FILE = '/geoip/ip2country/ip2country.dat';
+
+    private $index = null; // Holds the preloaded index
+    private $data  = array(); // Holds the data records, one chunk per index group
     private $fp;
     private $offset;
     private $datalen;
     private $lastentry;
 
     /**
+	 *  @var ComponentRegistrarInterface
+	 */
+    private $componentRegistrar;
+
+    /**
      * Initializes the ip to country lookup tables and preloads the index.
      */
-    public function __construct($datafile = null)
-    {
-        if (!$datafile)
-            $datafile = BP.'/var/geoip/ip2country/ip2country.dat';
-    
+    public function __construct(
+        ComponentRegistrarInterface $componentRegistrar
+    ) {
+        $this->componentRegistrar = $componentRegistrar;
+		$path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, self::MODULE_NAME);
+        $datafile = $path . self::BINARY_FILE;
+        
         $this->fp = fopen($datafile, 'r');
     
         $header = fread($this->fp, 8);

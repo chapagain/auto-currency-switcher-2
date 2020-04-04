@@ -1,20 +1,30 @@
 <?php
 namespace Chapagain\AutoCurrency\Helper;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Chapagain\AutoCurrency\Helper\Ip2Country;
+
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
 	/**
-	* @var \Magento\Framework\App\Config\ScopeConfigInterface
-	*/
+	 * @var ScopeConfigInterface
+	 */
 	protected $scopeConfig;
+
+	/**
+	 * @var Ip2Country
+	 */
+	protected $ip2Country;
 	
 	const XML_PATH_AUTOCURRENCY_ENABLED = 'chapagain_autocurrency/general/enabled';
 
 	public function __construct(
-		\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig		
+		ScopeConfigInterface $scopeConfig,
+		Ip2Country $ip2Country
 	)
 	{
-		$this->scopeConfig = $scopeConfig;	
+		$this->scopeConfig = $scopeConfig;
+		$this->ip2Country = $ip2Country;
 	}
 	
 	/**
@@ -38,8 +48,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		// http://www.xroxy.com/proxylist.php?country=GB&sort=ip
 		//return '128.199.105.86';	// GB/UK
 		//return '104.131.166.160';	// US
-		//return '146.185.155.141';	// NL
-		//return '103.252.194.100';	// IN
+		return '146.185.155.141';	// NL
+		//return '103.100.83.253';	// IN
 		//return '203.78.162.156';	// NP
 		return $_SERVER['REMOTE_ADDR'];
 	}
@@ -82,11 +92,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
 	public function loadIp2Country()
 	{
-		//include_once(BP.'/var/geoip/ip2country/Ip2Country.php');
-		include_once('Ip2Country.php');
-		$ipc = new Ip2Country(BP.'/var/geoip/ip2country/ip2country.dat');
-		$ipc->preload();
-		return $ipc;
+		$this->ip2Country->preload();
+		return $this->ip2Country;
 	}
 	
 	/**

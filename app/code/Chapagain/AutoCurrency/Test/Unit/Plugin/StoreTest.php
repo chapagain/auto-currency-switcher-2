@@ -6,15 +6,12 @@ use Chapagain\AutoCurrency\Plugin\Store;
 use Chapagain\AutoCurrency\Helper\Data;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Chapagain\AutoCurrency\Helper\Ip2Country;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class StoreTest extends TestCase
 {
 	const DEFAULT_CURRENCY_CODE = 'USD';
-
-	/**
-     * @var Data
-     */
-	private $data;
 
 	/**
      * @var Store
@@ -25,6 +22,11 @@ class StoreTest extends TestCase
      * @var \Chapagain\AutoCurrency\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
 	private $dataMock;
+
+	/**
+     * @var Ip2Country
+     */
+	private $ip2Country;
 	
 	/**
      * Set up test class
@@ -37,7 +39,7 @@ class StoreTest extends TestCase
 			->disableOriginalConstructor()
 			// ->setMethods(null) # all methods of the class run actual code
 			// ->setMethods([]) # all methods of the class returns null
-			->setMethods(['getIpAddress']) # all methods of the class run actual code except methods in the array which returns null
+			->setMethods(['getIpAddress', 'loadIp2Country']) # all methods of the class run actual code except methods in the array which returns null
 			->getMock();
 		
 		$currencyMock = $this->getMockBuilder(Currency::class)
@@ -48,8 +50,13 @@ class StoreTest extends TestCase
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->data = new Data($scopeConfigMock);
+		$componentRegistrar = $this->getMockBuilder(ComponentRegistrar::class)
+			->disableOriginalConstructor()
+			->setMethods(null) # all methods of the class run actual code
+			->getMock();
+
 		$this->store = new Store($this->dataMock, $currencyMock);
+		$this->ip2Country = new Ip2Country($componentRegistrar);
 	}
 
 	/**
@@ -69,6 +76,11 @@ class StoreTest extends TestCase
 		$this->dataMock->expects($this->any())
             ->method('getIpAddress')
 			->willReturn($ip);
+
+		$this->ip2Country->preload();
+		$this->dataMock->expects($this->any())
+            ->method('loadIp2Country')
+			->willReturn($this->ip2Country);
 
 		$defaultCurrencyCode = self::DEFAULT_CURRENCY_CODE;
 		$code = $this->store->getCurrencyCodeIp2Country($defaultCurrencyCode);

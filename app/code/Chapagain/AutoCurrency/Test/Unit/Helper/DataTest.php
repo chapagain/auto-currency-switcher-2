@@ -6,6 +6,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Chapagain\AutoCurrency\Helper\Data;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Chapagain\AutoCurrency\Helper\Ip2Country;
 
 class DataTest extends TestCase
 {
@@ -18,11 +19,16 @@ class DataTest extends TestCase
      * @var ScopeConfigInterface|MockObject
      */
 	private $scopeConfigMock;
+
+	/**
+     * @var Ip2Country|MockObject
+     */
+	private $ip2CountryMock;
 	
 	/**
      * Set up test class
      */
-    public function setUp()	
+    public function setUp()
     {
 		parent::setUp();
 		
@@ -30,7 +36,11 @@ class DataTest extends TestCase
 			->disableOriginalConstructor()
 			->getMock();
 
-        $this->data = new Data($this->scopeConfigMock);
+		$this->ip2CountryMock = $this->getMockBuilder(Ip2Country::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+        $this->data = new Data($this->scopeConfigMock, $this->ip2CountryMock);
 	}
 
 	/**
