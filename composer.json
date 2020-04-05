@@ -17,10 +17,9 @@
   ],
   "require": {
     "php": "~7.0.13||~7.1.0||~7.2.0||~7.3.0",
-    "magento/module-config": "100.0.*",
-    "magento/module-store": "100.0.*",
-    "magento/module-backend": "100.0.*",
-    "magento/framework": "100.0.*"
+    "magento/module-config": "*",
+    "magento/module-store": "*",
+    "magento/framework": "~100.1 || ~101.0 || ~102.0"
   },
   "autoload": {
     "files": [
