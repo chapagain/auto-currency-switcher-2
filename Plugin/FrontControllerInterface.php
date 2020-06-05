@@ -37,19 +37,26 @@ class FrontControllerInterface
     /**
      * Update current store currency code
      *
-     * @param \Magento\Framework\App\FrontController $subject
+     * @param \Magento\Framework\App\FrontControllerInterface $subject
+     * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface|\Magento\Framework\App\Response\Http
      */
-    public function beforeDispatch(
-        \Magento\Framework\App\FrontController $subject,
+    public function aroundDispatch(
+        \Magento\Framework\App\FrontControllerInterface $subject,
+        \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
         if ($this->helper->isEnabled()) {
             $currentCurrency = $this->storeManager->getStore()->getCurrentCurrencyCode();
-            $this->storeManager->getStore()->setCurrentCurrencyCode($this->getCurrencyCodeByIp($currentCurrency));
+            $newCurrency = $this->getCurrencyCodeByIp($currentCurrency);
+            if ($currentCurrency !== $newCurrency) {
+                $this->storeManager->getStore()->setCurrentCurrencyCode($newCurrency);
+                unset($_COOKIE[\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING]);
+            }
         }
+        return $proceed($request);
     }
 
     /**
