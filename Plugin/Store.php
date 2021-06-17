@@ -76,7 +76,7 @@ class Store
 		if (!$this->helper->checkValidIp($ipAddress)) {
 			return null;
 		}
-		$countryCode = $ipc->lookup($ipAddress);
+		$countryCode = $this->helper->useCloudflareCountry() ? $_SERVER['HTTP_CF_IPCOUNTRY'] : $ipc->lookup($ipAddress);
 		// return default currency code when country code is ZZ
 		// i.e. if browsed in localhost / personal computer
 		if ($countryCode == 'ZZ') {
