@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-	<type name="Magento\Store\Model\Store">
-      <plugin name="pluginChapagainAutoCurrencyStore" type="Chapagain\AutoCurrency\Plugin\Store" sortOrder="1" disabled="false" />
+    <type name="Magento\Framework\App\FrontControllerInterface">
+      <plugin name="pluginChapagainAutoCurrencyFrontControllerInterface" type="Chapagain\AutoCurrency\Plugin\FrontControllerInterface" sortOrder="-1" disabled="false" />
     </type>
 </config>
