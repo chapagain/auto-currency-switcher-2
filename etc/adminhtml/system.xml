@@ -16,6 +16,19 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
+            <group id="cloudflare" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Cloudflare</label>
+                <field id="use_connecting_ip" translate="label,tooltip" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Use Cloudflare Header for IP</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When available, it will use CF-Connecting-IP header instead of using $_SERVER['REMOTE_ADDR']</comment>
+                </field>
+                <field id="use_ipcountry" translate="label,tooltip" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Use Cloudflare Country</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When available, it will use Cf-IpCountry to detect user's country, instead of ip2country database.</comment>
+                </field>
+            </group>
         </section>
     </system>
 </config>

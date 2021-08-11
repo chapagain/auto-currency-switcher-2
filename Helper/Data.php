@@ -2,7 +2,6 @@
 namespace Chapagain\AutoCurrency\Helper;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Chapagain\AutoCurrency\Helper\Ip2Country;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -17,6 +16,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 	protected $ip2Country;
 	
 	const XML_PATH_AUTOCURRENCY_ENABLED = 'chapagain_autocurrency/general/enabled';
+	const XML_PATH_CLOUDFLARE_USE_CONNECTING_IP = 'chapagain_autocurrency/cloudflare/use_connecting_ip';
+	const XML_PATH_CLOUDFLARE_USE_IPCOUNTRY = 'chapagain_autocurrency/cloudflare/use_ipcountry';
 
 	public function __construct(
 		ScopeConfigInterface $scopeConfig,
@@ -38,6 +39,30 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->scopeConfig->getValue(self::XML_PATH_AUTOCURRENCY_ENABLED, $storeScope);
     }
         
+    /**
+     * Checks if we should use $_SERVER[CF-Connecting-IP] from Cloudflare
+     * @return bool
+     */
+    public function useCloudflareIpHeader()
+    {
+        $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+        $isAvailable = isset($_SERVER['HTTP_CF_CONNECTING_IP']);
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_CLOUDFLARE_USE_CONNECTING_IP, $storeScope)
+            && $isAvailable;
+    }
+
+    /**
+     * Checks if we should use $_SERVER[Cf-IpCountry] from Cloudflare
+     * @return bool
+     */
+    public function useCloudflareCountry()
+    {
+        $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+        $isAvailable = isset($_SERVER['HTTP_CF_IPCOUNTRY']);
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_CLOUDFLARE_USE_IPCOUNTRY, $storeScope)
+            && $isAvailable;
+    }
+
 	/**
      * Get IP Address
      *
@@ -51,6 +76,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		//return '146.185.155.141';	// NL
 		//return '103.100.83.253';	// IN
 		//return '203.78.162.156';	// NP
+        if ($this->useCloudflareIpHeader()) {
+            return $_SERVER['HTTP_CF_CONNECTING_IP'];
+        }
+
 		return $_SERVER['REMOTE_ADDR'];
 	}
 		
@@ -92,7 +121,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
 	public function loadIp2Country()
 	{
-		$this->ip2Country->preload();
+        if ($this->useCloudflareCountry()) {
+		    $this->ip2Country->preload();
+        }
+        
 		return $this->ip2Country;
 	}
 	
